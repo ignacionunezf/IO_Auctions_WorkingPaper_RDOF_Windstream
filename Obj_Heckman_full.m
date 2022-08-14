@@ -1,7 +1,6 @@
 function ret=Obj_Heckman_full(param)
 
 global data data2
-%oaram: alpha, 1/h,sigma_xi, sigma_epsilon_uncond 
 
 x=data2(:,1);
 y=data2(:,2);
@@ -11,7 +10,6 @@ alpha_wt=zeros(3,1);
 alpha_wt(1)=param(1);
 alpha_wt(2)=param(2);
 alpha_wt(3)=param(3);
-
 
 delta=zeros(3,1);
 delta(1)=param(4);
@@ -49,11 +47,20 @@ for i=1:size(data,1)
        if cdf(pd3,data(i,4)-latent2(i))==0
        loglike=loglike+log(0.00000001)+log(1/(sigma2));
        else
-       t_up = truncate(pd3,-inf,data(i,4)-latent2(i)); %for uncensored
-       draws_xi(i,:) = transpose(random(t_up,sim,1)); %for uncensored
-       prob_epsilon_unc(i,1)=log(sum(pdf(pd,((data(i,4)*column_ones-latent(i)*column_ones-k*draws_xi(i,:)))/sigma2))/sim*cdf(pd,(data(i,4)-latent2(i))/sigma_xi));
+       
+       simdraws_aux=simdraws*sigma_xi;
+       draws_xi=simdraws_aux(simdraws_aux(:,1)<data(i,4)-latent2(i));
+       n_xi=size(draws_xi,1);
+       
+       if n_xi>10
+       column_ones=ones(n_xi,1);
+       prob_epsilon_unc(i,1)=log(sum(pdf(pd,((data(i,4)*column_ones-latent(i)*column_ones-k*draws_xi))/sigma2))/n_xi*cdf(pd,(data(i,4)-latent2(i))/sigma_xi));
        loglike=loglike+prob_epsilon_unc(i,1);
        loglike=loglike+log(1/(sigma2)); 
+       else
+       loglike=loglike+log(0.00000001)+log(1/(sigma2));
+       end
+      
        end
     end
 end
