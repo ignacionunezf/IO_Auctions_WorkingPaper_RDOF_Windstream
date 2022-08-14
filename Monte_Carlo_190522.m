@@ -1,5 +1,5 @@
-% Monte Carlo - Tobit
-% Ignacio Nunez, ijnunez@utexas.edu
+% Monte Carlo Simulation, Estimator for Windstream's values in the RDOF (Working paper)
+% Ignacio Nunez, Economics Department, UT-Austin, ijnunez@utexas.edu
 
 %% Create Sample
 
