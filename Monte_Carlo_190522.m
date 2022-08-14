@@ -6,26 +6,27 @@
 clear all;
 close all;
 
-N=1000;
+N=1000; %sample size
 x=rand(N,1); %common covariates
 y=rand(N,1); %competitor covariates
 d=rand(N,1); %Windstream covariates
 
 intercept=ones(N,1);
 %competitors parameters
-mu_1=1; 
+mu_1=0; 
 mu_1x=0.5;
-mu_1y=0.5;
-st_1=1;
+mu_1y=2;
+st_1=0.5;
 
 %Windstream parameters
-mu_2=0.5;
-mu_2x=1;
-mu_2d=0.3;
-st_2=1;
-kappa=-0.5;
+mu_2=0;
+mu_2x=0.5;
+mu_2d=2;
+st_2=0.5;
+kappa=0.5;
 
-simulations=500;
+%Set number of simulations
+simulations=1;
 Results_coef=zeros(simulations,9);
 
 for s=1:simulations
@@ -64,12 +65,21 @@ for s=1:simulations
     simdraws = random(pd,sim,1);
 
     %Estimate parameters
-    param=[0,0,0,0,0,0,0,0,0];
-    %param=[alpha_wt(1),alpha_wt(2),alpha_wt(3),delta(1),delta(2),delta(3),k,sigma2,sigma_xi];
-    options = optimset('Display','iter','MaxFunEvals',4e3,'MaxIter',4e3);
-    Obj_Heckman_full(param)
+    param=[0,0,0,0,0,0,0,1,1];
+    real=[mu_2,mu_2x,mu_2d,mu_1,mu_1x,mu_1y,kappa,st_2,st_1];
+    %param=[mu_1,mu_1x,mu_1y,mu_2,mu_2x,mu_2d,k,sigma2,sigma_xi];
+    options = optimset('Display','iter','MaxFunEvals',1e3,'MaxIter',1e3);
     solution=fminsearch('Obj_Heckman_full',param,options);
     solution=fminunc('Obj_Heckman_full',solution,options);
+    solution=fminsearch('Obj_Heckman_full',solution,options);
+    %solution=fminsearch('Obj_Heckman_full',solution,options);
+    %solution=fminsearch('Obj_Heckman_full',solution,options);
+    %solution=fminsearch('Obj_Heckman_full',solution,options);
+
+    Obj_Heckman_full(param)
+    Obj_Heckman_full(real)
+    Obj_Heckman_full(solution)
+
     Results_coef(s,:)=solution;    
     
 end
