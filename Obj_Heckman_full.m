@@ -3,10 +3,6 @@ function ret=Obj_Heckman_full(param)
 global data data2
 global simdraws
 
-x=data2(:,1);
-y=data2(:,2);
-d=data2(:,3);
-
 alpha_wt=zeros(3,1);
 alpha_wt(1)=param(1);
 alpha_wt(2)=param(2);
@@ -23,6 +19,9 @@ sigma2 = max(abs(param(8)),0.00001);
 sigma_xi=max(abs(param(9)),0.00001);
 
 vector_ones=ones(size(data2,1),1);
+x=data2(:,1);
+y=data2(:,2);
+d=data2(:,3);
 latent=alpha_wt(1)*vector_ones+alpha_wt(2)*x+alpha_wt(3)*d; %mean utility WT
 latent2=delta(1)*vector_ones+delta(2)*x+delta(3)*y;  %mean utility competitors
 
