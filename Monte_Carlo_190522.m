@@ -58,6 +58,11 @@ for s=1:simulations
     end
     end
     
+    global simdraws
+    sim=10000;
+    pd = makedist('Normal','mu',0,'sigma',1);
+    simdraws = random(pd,sim,1);
+
     %Estimate parameters
     param=[0,0,0,0,0,0,0,0,0];
     %param=[alpha_wt(1),alpha_wt(2),alpha_wt(3),delta(1),delta(2),delta(3),k,sigma2,sigma_xi];
