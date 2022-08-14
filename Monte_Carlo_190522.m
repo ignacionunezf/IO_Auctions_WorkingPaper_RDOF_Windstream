@@ -65,7 +65,7 @@ for s=1:simulations
     Obj_Heckman_full(param)
     solution=fminsearch('Obj_Heckman_full',param,options);
     solution=fminunc('Obj_Heckman_full',solution,options);
-    Results_coef(s,:)=Obj_MonteCarlo(solution);    
+    Results_coef(s,:)=solution;    
     
 end
 
